@@ -1,0 +1,166 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8ulo0q1eav8f"]
+
+[ext_resource type="Script" path="res://viewer.gd" id="1_ye8ph"]
+[ext_resource type="Script" path="res://timeline.gd" id="2_diu1e"]
+
+[node name="Viewer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ye8ph")
+
+[node name="VBox0" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HSplit1" type="HSplitContainer" parent="VBox0"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 9.0
+split_offset = 200
+
+[node name="VBox1" type="VBoxContainer" parent="VBox0/HSplit1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="imgOriginal" type="TextureRect" parent="VBox0/HSplit1/VBox1"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 3
+stretch_mode = 5
+
+[node name="HBox1" type="HBoxContainer" parent="VBox0/HSplit1/VBox1"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="chkHidden" type="CheckBox" parent="VBox0/HSplit1/VBox1/HBox1"]
+layout_mode = 2
+text = "show hidden"
+
+[node name="butPrevious" type="Button" parent="VBox0/HSplit1/VBox1/HBox1"]
+layout_mode = 2
+text = "<"
+
+[node name="labImageCount" type="Label" parent="VBox0/HSplit1/VBox1/HBox1"]
+layout_mode = 2
+
+[node name="butNext" type="Button" parent="VBox0/HSplit1/VBox1/HBox1"]
+layout_mode = 2
+text = ">"
+
+[node name="togHide" type="CheckButton" parent="VBox0/HSplit1/VBox1/HBox1"]
+layout_mode = 2
+button_pressed = true
+text = "hide"
+
+[node name="Margin2" type="MarginContainer" parent="VBox0/HSplit1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBox2" type="VBoxContainer" parent="VBox0/HSplit1/Margin2"]
+layout_mode = 2
+
+[node name="txtTitle" type="TextEdit" parent="VBox0/HSplit1/Margin2/VBox2"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+placeholder_text = "Title"
+context_menu_enabled = false
+scroll_fit_content_height = true
+
+[node name="txtDescription" type="TextEdit" parent="VBox0/HSplit1/Margin2/VBox2"]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Description"
+wrap_mode = 1
+
+[node name="HBox2" type="HBoxContainer" parent="VBox0/HSplit1/Margin2/VBox2"]
+layout_mode = 2
+
+[node name="txtMuseum" type="TextEdit" parent="VBox0/HSplit1/Margin2/VBox2/HBox2"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Museum"
+context_menu_enabled = false
+scroll_fit_content_height = true
+
+[node name="txtAdded" type="TextEdit" parent="VBox0/HSplit1/Margin2/VBox2/HBox2"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "added"
+context_menu_enabled = false
+scroll_fit_content_height = true
+
+[node name="HBox3" type="HBoxContainer" parent="VBox0/HSplit1/Margin2/VBox2"]
+layout_mode = 2
+
+[node name="txtType" type="TextEdit" parent="VBox0/HSplit1/Margin2/VBox2/HBox3"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "type"
+context_menu_enabled = false
+scroll_fit_content_height = true
+
+[node name="txtMaterial" type="TextEdit" parent="VBox0/HSplit1/Margin2/VBox2/HBox3"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "material"
+context_menu_enabled = false
+scroll_fit_content_height = true
+
+[node name="txtDate" type="TextEdit" parent="VBox0/HSplit1/Margin2/VBox2"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+placeholder_text = "date"
+context_menu_enabled = false
+scroll_fit_content_height = true
+
+[node name="txtPlace" type="TextEdit" parent="VBox0/HSplit1/Margin2/VBox2"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+placeholder_text = "origin"
+context_menu_enabled = false
+scroll_fit_content_height = true
+
+[node name="txtTranslated" type="TextEdit" parent="VBox0/HSplit1/Margin2/VBox2"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+placeholder_text = "translated?"
+context_menu_enabled = false
+scroll_fit_content_height = true
+
+[node name="timeline" type="Control" parent="VBox0"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_diu1e")
+
+[connection signal="toggled" from="VBox0/HSplit1/VBox1/HBox1/chkHidden" to="." method="_on_chk_hidden_toggled"]
+[connection signal="pressed" from="VBox0/HSplit1/VBox1/HBox1/butPrevious" to="." method="_on_but_previous_pressed"]
+[connection signal="pressed" from="VBox0/HSplit1/VBox1/HBox1/butNext" to="." method="_on_but_next_pressed"]
+[connection signal="toggled" from="VBox0/HSplit1/VBox1/HBox1/togHide" to="." method="_on_tog_hide_toggled"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtTitle" to="." method="_on_txt_title_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtDescription" to="." method="_on_txt_description_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox2/txtMuseum" to="." method="_on_txt_museum_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox2/txtAdded" to="." method="_on_txt_museum_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox2/txtAdded" to="." method="_on_txt_added_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox3/txtType" to="." method="_on_txt_type_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox3/txtType" to="." method="_on_txt_museum_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox3/txtMaterial" to="." method="_on_txt_material_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox3/txtMaterial" to="." method="_on_txt_museum_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtDate" to="." method="_on_txt_museum_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtDate" to="." method="_on_txt_date_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtPlace" to="." method="_on_txt_museum_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtPlace" to="." method="_on_txt_place_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtTranslated" to="." method="_on_txt_museum_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtTranslated" to="." method="_on_txt_translated_text_changed"]

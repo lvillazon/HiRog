@@ -1,0 +1,42 @@
+{
+	"hide": [
+		"res://originals//Hieroglyphs/PXL_20230414_132505460.jpg",
+		"res://originals//Hieroglyphs/PXL_20230802_094230818.jpg",
+		"res://originals//Hieroglyphs/PXL_20230414_133527527.jpg",
+		"res://originals//Hieroglyphs/PXL_20230802_092829827.jpg",
+		"res://originals//Hieroglyphs/PXL_20230414_133536234.jpg",
+		"res://originals//Hieroglyphs/PXL_20230802_095531787.jpg",
+		"res://originals//Hieroglyphs/PXL_20230414_133508588.jpg",
+		"res://originals//Hieroglyphs/PXL_20230802_095909516.jpg",
+		"res://originals//Hieroglyphs/PXL_20230802_100530358.jpg",
+		"res://originals//Hieroglyphs/PXL_20230802_100601922.jpg",
+		"res://originals//Hieroglyphs/PXL_20230414_133235530.jpg"
+	],
+	"res://originals//Hieroglyphs/PXL_20230414_132435537.jpg": {
+		"added": "14/4/2023",
+		"date": "3200 - 3300 years old",
+		"description": "The ram of the god Amun with a bennu bird. The lower part shows the deceased with a text from the Book of the Dead.",
+		"location": "RAMM, Exeter",
+		"material": "granite",
+		"place": "Great Pyramid (uncertain)",
+		"title": "Miniature stela",
+		"translated": "no",
+		"type": "stela"
+	},
+	"res://originals//Hieroglyphs/PXL_20230414_133211515.jpg": {
+		"description": "",
+		"location": "",
+		"title": "item 2 foo bar"
+	},
+	"res://originals//Hieroglyphs/PXL_20230414_133536234.jpg": {
+		"added": "added",
+		"date": "unknown",
+		"description": "",
+		"location": "",
+		"material": "unknown",
+		"place": "unknown",
+		"title": "this should be hidden",
+		"translated": "no",
+		"type": ""
+	}
+}
