@@ -1,0 +1,139 @@
+[gd_scene load_steps=2 format=3 uid="uid://hj3e6o7my183"]
+
+[ext_resource type="Script" path="res://date_dialog.gd" id="1_mv73r"]
+
+[node name="Window" type="Window"]
+title = "Artefact date"
+position = Vector2i(0, 36)
+size = Vector2i(300, 210)
+visible = false
+always_on_top = true
+popup_window = true
+script = ExtResource("1_mv73r")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="HBoxHeaders" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 35
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxHeaders"]
+layout_mode = 2
+text = "from"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxHeaders"]
+layout_mode = 2
+text = "to"
+
+[node name="HBoxYearsOld" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="linFromYears" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxYearsOld"]
+layout_mode = 2
+
+[node name="linToYears" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxYearsOld"]
+layout_mode = 2
+alignment = 2
+expand_to_text_length = true
+
+[node name="labYearsOld" type="Label" parent="MarginContainer/VBoxContainer/HBoxYearsOld"]
+layout_mode = 2
+text = "years old"
+
+[node name="HBoxBCE" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="linFromBCE" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxBCE"]
+layout_mode = 2
+
+[node name="linToBCE" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxBCE"]
+layout_mode = 2
+alignment = 2
+expand_to_text_length = true
+
+[node name="labBCE" type="Label" parent="MarginContainer/VBoxContainer/HBoxBCE"]
+layout_mode = 2
+text = "BCE"
+
+[node name="HBoxKingdom" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="linFromKingdom" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxKingdom"]
+layout_mode = 2
+
+[node name="linToKingdom" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxKingdom"]
+layout_mode = 2
+alignment = 2
+expand_to_text_length = true
+
+[node name="labKingdom" type="Label" parent="MarginContainer/VBoxContainer/HBoxKingdom"]
+layout_mode = 2
+text = "kingdom"
+
+[node name="HBoxPeriod" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/HBoxPeriod"]
+layout_mode = 2
+alignment = 1
+selected = 0
+allow_reselect = true
+item_count = 10
+popup/item_0/text = "select period"
+popup/item_1/text = "Early Period"
+popup/item_1/id = 1
+popup/item_2/text = "Old Kingdom"
+popup/item_2/id = 2
+popup/item_3/text = "1st Intermediate"
+popup/item_3/id = 3
+popup/item_4/text = "Middle Kingdom"
+popup/item_4/id = 4
+popup/item_5/text = "2nd Intermediate"
+popup/item_5/id = 5
+popup/item_6/text = "New Kingdom"
+popup/item_6/id = 6
+popup/item_7/text = "3rd Intermediate"
+popup/item_7/id = 7
+popup/item_8/text = "Late Period"
+popup/item_8/id = 8
+popup/item_8/separator = true
+popup/item_9/text = "Hellenistic"
+popup/item_9/id = 9
+
+[node name="HBoxButtons" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+alignment = 2
+
+[node name="butCancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxButtons"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+text = "Cancel"
+
+[node name="butOK" type="Button" parent="MarginContainer/VBoxContainer/HBoxButtons"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+disabled = true
+text = "OK
+"
+
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/HBoxYearsOld/linFromYears" to="." method="_on_lin_from_years_focus_exited"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/HBoxYearsOld/linToYears" to="." method="_on_lin_to_years_focus_exited"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/HBoxBCE/linFromBCE" to="." method="_on_lin_from_bce_focus_exited"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxBCE/linFromBCE" to="." method="_on_lin_from_bce_text_changed"]
+[connection signal="focus_exited" from="MarginContainer/VBoxContainer/HBoxBCE/linToBCE" to="." method="_on_lin_to_bce_focus_exited"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxButtons/butCancel" to="." method="_on_but_cancel_pressed"]
