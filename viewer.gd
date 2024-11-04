@@ -1,5 +1,8 @@
 extends Control
 
+# signal to send the artefact dates to the timeline
+signal send_artefact_dates(date_packet)
+
 # references to the UI elements
 @onready var artefact_pane = $VBox0/HSplit1/VBox1
 @onready var info_pane = $VBox0/HSplit1/Margin2/VBox2
@@ -7,7 +10,9 @@ extends Control
 
 @onready var next_button = artefact_pane.get_node("HBox1/butNext")
 @onready var prev_button = artefact_pane.get_node("HBox1/butPrevious")
-@onready var item_image = artefact_pane.get_node("imgOriginal")
+@onready var item_image = artefact_pane.get_node("HBoxImages/imgOriginal")
+@onready var previous_image = artefact_pane.get_node("HBoxImages/imgPrevious")
+@onready var next_image = artefact_pane.get_node("HBoxImages/imgNext")
 @onready var item_hidden = artefact_pane.get_node("HBox1/togHide")
 @onready var image_count_label = artefact_pane.get_node("HBox1/labImageCount")
 
@@ -21,6 +26,10 @@ extends Control
 @onready var item_place_origin = info_pane.get_node("txtPlace")
 @onready var item_translated = info_pane.get_node("txtTranslated")
 
+# Load the date selector scene
+@onready var date_dialog_scene = preload("res://date_dialog.tscn")
+var date_dialog # class field to reference it
+
 # metadata keys
 const TITLE = "title"				# a short  name
 const DESCRIPTION = "description"	# any infotext from the original museum plaque
@@ -28,7 +37,9 @@ const LOCATION = "location"			# the museum
 const TYPE = "type"					# stone stela, papyrus, sarcophagus etc
 const MATERIAL = "material"			# limestone, granite, wood etc
 const DATE_ADDED = "added"			# date I 'acquired' it
-const DATE_ORIGIN = "date"			# date it is from - this may need to have an upper and lower bound and might need to be expressed in terms of kingdoms or dynasties - might even be unknown
+const DATE_ORIGIN_FROM = "date_from"	# date it is from - oldest
+const DATE_ORIGIN_TO = "date_to"	 	# date it is from - mosrt recent
+const DATE_ORIGIN_TEXT = "date_text"	# date it is from - descriptio=ve text
 const PLACE_ORIGIN = "place"		# where is it from - again, could have variable precision or be unknown
 const TRANSLATED = "translated"		# has it been translated yet? - no, partial translation, complete translation, externally verified
 const HIDE_LIST = "hide"			# list of image files to hide from the normal view
@@ -49,8 +60,13 @@ func _ready() -> void:
 	load_metadata()
 	load_images(IMAGE_PATH)
 	if images.size() > 0:
-		display_item(images[current_index])
-
+		display_item(current_index)
+		
+	# instantiate the date selector dialog and add it to the node tree
+	date_dialog = date_dialog_scene.instantiate()
+	add_child(date_dialog)
+	# connect the signal that retuns the data from the dialog
+	date_dialog.connect("send_date", Callable(self, "_on_date_selected"))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -92,10 +108,8 @@ func update_hidden_list(image_name: String, hidden: bool):
 		if !metadata.has(HIDE_LIST):  # create the list if necessary
 			metadata[HIDE_LIST] = []
 		if !image_name in metadata[HIDE_LIST]:  # don't add if already there
-			print("adding " + image_name)
 			metadata[HIDE_LIST].append(image_name)
 	else:  # remove the file from the list
-		print("removing " + image_name)
 		metadata[HIDE_LIST].erase(image_name)
 	save_metadata()
 
@@ -129,34 +143,47 @@ func save_metadata():
 # return metadata or empty string if not found
 func safely_get(item: String, field: String) -> String:
 	if metadata.has(item) and metadata[item].has(field):
-		return metadata[item][field]
+		return str(metadata[item][field])
 	else:
 		return ""
 	
-func display_item(image_path: String):
+func display_item(index: int) -> void:
 	# display the image
-	var texture = load(image_path)
-	item_image.texture = texture
+	item_image.texture = load(images[index])
 	image_count_label.text = (
 		str(current_index) + " of " + str(images.size()-1)
 		)
+	# display previous and next images if we are in "show hidden" mode
+	if show_hidden:
+		if index > 0:
+			previous_image.texture = load(images[index-1])
+		if index < len(images)-1:
+			next_image.texture = load(images[index+1])
 	
 	# display metadata
-	print(metadata)  # DEBUG
-	var item_key = image_path
+	var item_key = images[index]
 	item_title.text = safely_get(item_key, TITLE)
 	item_desc.text = safely_get(item_key, DESCRIPTION)
 	item_museum.text = safely_get(item_key, LOCATION)
 	item_date_added.text = safely_get(item_key, DATE_ADDED)
 	item_type.text = safely_get(item_key, TYPE)
 	item_material.text = safely_get(item_key, MATERIAL)
-	item_date_origin.text = safely_get(item_key, DATE_ORIGIN)
+	item_date_origin.text = safely_get(item_key, DATE_ORIGIN_TEXT)
 	item_place_origin.text = safely_get(item_key, PLACE_ORIGIN)
 	item_translated.text = safely_get(item_key, TRANSLATED)
 	item_hidden.button_pressed = is_hidden(item_key)
 
+	# update the timeline with the new dates
+	var date_packet = [
+		int(safely_get(item_key,DATE_ORIGIN_FROM)),
+		int(safely_get(item_key,DATE_ORIGIN_TO)),
+	]
+	print("sending date packet:", date_packet)
+	emit_signal("send_artefact_dates", date_packet)
+
+
 # add metadata for an item
-func update_item(image_filename: String, field: String, value: String):
+func update_item(image_filename: String, field: String, value):
 	if metadata.has(image_filename):
 		metadata[image_filename][field] = value
 	else:  # create a new entry, since this one doesnt exist yet
@@ -168,7 +195,7 @@ func update_item(image_filename: String, field: String, value: String):
 			TYPE: "",				# stone stela, papyrus, sarcophagus etc
 			MATERIAL: "unknown",		# limestone, granite, wood etc
 			DATE_ADDED: "added",		# date I 'acquired' it
-			DATE_ORIGIN: "unknown",		# date it is from - this may need to have an upper and lower bound and might need to be expressed in terms of kingdoms or dynasties - might even be unknown
+			DATE_ORIGIN_TEXT: "unknown",		# date it is from - this may need to have an upper and lower bound and might need to be expressed in terms of kingdoms or dynasties - might even be unknown
 			PLACE_ORIGIN: "unknown",		# where is it from - again, could have variable precision or be unknown
 			TRANSLATED: "no",	# has it been translated yet? - no, partial translation, complete translation, externally verified
 		}
@@ -187,13 +214,13 @@ func _input(event):
 func _on_but_next_pressed() -> void:
 	if current_index < images.size():
 		current_index = current_index + 1
-		display_item(images[current_index])
+		display_item(current_index)
 
 
 func _on_but_previous_pressed() -> void:
 	if current_index >0 and current_index <= images.size():
 		current_index = current_index - 1
-		display_item(images[current_index])
+		display_item(current_index)
 
 
 func _on_txt_title_text_changed() -> void:
@@ -220,8 +247,8 @@ func _on_txt_material_text_changed() -> void:
 	update_item(images[current_index], MATERIAL, item_material.text)
 
 
-func _on_txt_date_text_changed() -> void:
-	update_item(images[current_index], DATE_ORIGIN, item_date_origin.text)
+#func _on_txt_date_text_changed() -> void:
+#	update_item(images[current_index], DATE_ORIGIN, item_date_origin.text)
 
 
 func _on_txt_place_text_changed() -> void:
@@ -241,4 +268,19 @@ func _on_chk_hidden_toggled(toggled_on: bool) -> void:
 	print("Toggling to ", show_hidden)
 	load_images(IMAGE_PATH)
 	if images.size() > 0:
-		display_item(images[current_index])
+		display_item(current_index)
+	# hide the prev/next display when show hidden is off
+	if !show_hidden:
+		previous_image.texture = null
+		next_image.texture = null
+
+func _on_txt_date_focus_entered() -> void:
+	# launch the date selector dialog
+	date_dialog.popup_centered()  # Centers the dialog on screen
+
+func _on_date_selected(date_packet):
+	update_item(images[current_index], DATE_ORIGIN_TEXT, date_packet[0])
+	update_item(images[current_index], DATE_ORIGIN_FROM, date_packet[1])
+	update_item(images[current_index], DATE_ORIGIN_TO, date_packet[2])
+	item_date_origin.text = date_packet[0]
+	

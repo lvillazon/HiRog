@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8ulo0q1eav8f"]
+[gd_scene load_steps=4 format=3 uid="uid://b8ulo0q1eav8f"]
 
 [ext_resource type="Script" path="res://viewer.gd" id="1_ye8ph"]
 [ext_resource type="Script" path="res://timeline.gd" id="2_diu1e"]
+[ext_resource type="Script" path="res://artefact_image.gd" id="2_g228f"]
 
 [node name="Viewer" type="Control"]
 layout_mode = 3
@@ -30,7 +31,28 @@ split_offset = 200
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="imgOriginal" type="TextureRect" parent="VBox0/HSplit1/VBox1"]
+[node name="HBoxImages" type="HBoxContainer" parent="VBox0/HSplit1/VBox1"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="imgPrevious" type="TextureRect" parent="VBox0/HSplit1/VBox1/HBoxImages"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 3
+stretch_mode = 5
+
+[node name="imgOriginal" type="TextureRect" parent="VBox0/HSplit1/VBox1/HBoxImages"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+expand_mode = 3
+stretch_mode = 5
+script = ExtResource("2_g228f")
+
+[node name="imgNext" type="TextureRect" parent="VBox0/HSplit1/VBox1/HBoxImages"]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_vertical = 3
@@ -152,14 +174,15 @@ script = ExtResource("2_diu1e")
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtTitle" to="." method="_on_txt_title_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtDescription" to="." method="_on_txt_description_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox2/txtMuseum" to="." method="_on_txt_museum_text_changed"]
-[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox2/txtAdded" to="." method="_on_txt_museum_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox2/txtAdded" to="." method="_on_txt_added_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox2/txtAdded" to="." method="_on_txt_museum_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox3/txtType" to="." method="_on_txt_type_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox3/txtType" to="." method="_on_txt_museum_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox3/txtMaterial" to="." method="_on_txt_material_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/HBox3/txtMaterial" to="." method="_on_txt_museum_text_changed"]
-[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtDate" to="." method="_on_txt_museum_text_changed"]
+[connection signal="focus_entered" from="VBox0/HSplit1/Margin2/VBox2/txtDate" to="." method="_on_txt_date_focus_entered"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtDate" to="." method="_on_txt_date_text_changed"]
+[connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtDate" to="." method="_on_txt_museum_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtPlace" to="." method="_on_txt_museum_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtPlace" to="." method="_on_txt_place_text_changed"]
 [connection signal="text_changed" from="VBox0/HSplit1/Margin2/VBox2/txtTranslated" to="." method="_on_txt_museum_text_changed"]
